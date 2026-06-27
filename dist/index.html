@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predicta - Advanced Customer Churn Analytics</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Google Identity Services SDK -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script type="module" crossorigin src="/assets/index-Bgx78Ntr.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-Da1hQoIo.css">
+</head>
+<body>
+  <!-- ==========================================
+       GOOGLE LOGIN GATE OVERLAY
+       ========================================== -->
+  <div id="login-gate" class="login-gate">
+    <div class="login-box">
+      <div class="login-logo" style="display: flex; align-items: center; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+        <img src="/assets/logo_icon-ZRBykTGn.png" alt="Predicta Logo" style="height: 60px; object-fit: contain;">
+        <span style="font-size: 2.2rem; font-weight: 800; letter-spacing: -0.05em; background: linear-gradient(135deg, #06b6d4, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Predicta</span>
+      </div>
+      <p class="login-subtitle" style="margin-block-start: var(--space-xs); margin-block-end: var(--space-md);">AI-Driven Customer Churn Prediction & Analytics</p>
+      
+      <!-- Google Sign In Button Container (populated dynamically by Google Identity SDK) -->
+      <div id="google-signin-container" class="google-signin-container" style="margin-block-end: var(--space-md);"></div>
+      
+      <p class="login-footer">Secure authentication powered by Google Identity Protocol.</p>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN DASHBOARD LAYOUT
+       ========================================== -->
+  <div class="dashboard-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" aria-label="Main Navigation">
+      <div class="logo-area" style="display: flex; align-items: center; gap: var(--space-xs); padding-inline-start: var(--space-xs); padding-block-end: var(--space-sm); border-bottom: 1px solid var(--color-border); margin-bottom: var(--space-md);">
+        <img src="/assets/logo_icon-ZRBykTGn.png" alt="Predicta Logo" style="height: 32px; object-fit: contain;">
+        <span style="font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; background: linear-gradient(135deg, #06b6d4, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Predicta</span>
+      </div>
+
+      <nav class="nav-links" id="sidebar-nav">
+        <a href="#" class="nav-item active" data-view="dashboard" id="nav-dashboard">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item" data-view="customers" id="nav-customers">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Customers
+        </a>
+        <a href="#" class="nav-item" data-view="predictions" id="nav-predictions">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+          Predictions
+        </a>
+        <a href="#" class="nav-item" data-view="segments" id="nav-segments">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+          Segments
+        </a>
+        <a href="#" class="nav-item" data-view="reports" id="nav-reports">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Reports
+        </a>
+        <a href="#" class="nav-item" data-view="settings" id="nav-settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Settings
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <div class="workspace">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="global-search" placeholder="Search customers, plans, scores..." aria-label="Search dashboard">
+        </div>
+        <div class="header-actions">
+          <!-- Notification Bell and Dropdown Wrapper -->
+          <div class="header-dropdown-wrapper">
+            <button class="notification-btn" aria-label="Notifications" id="notification-trigger">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span class="notification-badge" id="notification-count">2</span>
+            </button>
+            <div class="notification-dropdown hidden" id="notification-dropdown" role="menu" aria-label="Recent Alerts">
+              <div class="dropdown-header">
+                <h3>At-Risk System Alerts</h3>
+              </div>
+              <ul class="notification-list" id="notification-list-items">
+                <!-- Dynamically populated notifications -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- User Profile and Dropdown Wrapper -->
+          <div class="header-dropdown-wrapper">
+            <div class="user-profile" id="user-profile-trigger">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Sarah J." class="user-avatar" id="hdr-user-avatar">
+              <div class="user-info">
+                <span class="user-name" id="hdr-user-name">Sarah J.</span>
+                <span class="user-role" id="hdr-user-role">Customer Success Director</span>
+              </div>
+            </div>
+            <div class="profile-dropdown hidden" id="profile-dropdown" role="menu" aria-label="User profile settings">
+              <div class="profile-dropdown-header">
+                <strong id="dropdown-profile-name">Sarah Jenkins</strong>
+                <span id="dropdown-profile-email">sarah.j@predicta.ai</span>
+              </div>
+              <ul class="profile-menu">
+                <li><a href="#" id="profile-menu-settings">Account Settings</a></li>
+                <li><a href="#" id="profile-menu-billing">Billing Details</a></li>
+                <li class="divider"></li>
+                <li><a href="#" id="profile-menu-logout" class="text-danger">Log Out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Grid -->
+      <main class="main-content">
+        
+        <!-- ==========================================
+             VIEW 1: DASHBOARD VIEW
+             ========================================== -->
+        <section id="view-dashboard" class="dashboard-view">
+          <div class="dashboard-header-row">
+            <h1 class="page-title">Dashboard</h1>
+            <div class="cohort-filter">
+              <label for="cohort-select">Cohort Scope:</label>
+              <select id="cohort-select" class="styled-select">
+                <option value="all-customers">All Customers</option>
+                <option value="near-cirolint">Near Cirolint</option>
+                <option value="enterprise">Enterprise Only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- KPI Metric Cards Grid -->
+          <section class="kpi-grid" aria-label="Key Performance Indicators">
+            <div class="kpi-card" id="kpi-total-customers">
+              <div class="kpi-header">
+                <span class="kpi-title">Total Customers</span>
+                <span class="badge badge-success" id="badge-total-customers">+1.8%</span>
+              </div>
+              <div class="kpi-value" id="val-total-customers">24,510</div>
+              <div class="kpi-chart-preview" id="preview-total-customers">
+                <canvas id="sparkline-total-customers" width="120" height="30" aria-hidden="true"></canvas>
+              </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-retention-rate">
+              <div class="kpi-header">
+                <span class="kpi-title">Retention Rate</span>
+                <span class="badge badge-success" id="badge-retention-rate">+0.5%</span>
+              </div>
+              <div class="kpi-value" id="val-retention-rate">88.4%</div>
+              <div class="kpi-chart-preview" id="preview-retention-rate">
+                <canvas id="sparkline-retention-rate" width="120" height="30" aria-hidden="true"></canvas>
+              </div>
+            </div>
+
+            <div class="kpi-card" id="kpi-churn-risk">
+              <div class="kpi-header">
+                <span class="kpi-title">Churn Risk (90 days)</span>
+                <span class="badge badge-danger" id="badge-churn-risk">-0.3%</span>
+              </div>
+              <div class="kpi-value" id="val-churn-risk">6.2%</div>
+              <div class="kpi-chart-preview" id="preview-churn-risk">
+                <canvas id="sparkline-churn-risk" width="120" height="30" aria-hidden="true"></canvas>
+              </div>
+            </div>
+
+            <div class="kpi-card danger-alert" id="kpi-revenue-risk">
+              <div class="kpi-header">
+                <span class="kpi-title">Revenue at Risk</span>
+                <span class="risk-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
+              </div>
+              <div class="kpi-value" id="val-revenue-risk">$412k</div>
+              <div class="kpi-chart-preview" id="preview-revenue-risk">
+                <canvas id="sparkline-revenue-risk" width="120" height="30" aria-hidden="true"></canvas>
+              </div>
+            </div>
+          </section>
+
+          <!-- Dynamic Visualization and Feeds -->
+          <div class="analytics-layout-grid">
+            <!-- Left side analytics column -->
+            <div class="analytics-column">
+              <!-- Customer Retention & Churn Trends Card -->
+              <div class="content-card" id="card-trends">
+                <div class="card-header">
+                  <h2>Customer Retention & Churn Trends</h2>
+                  <div class="card-controls">
+                    <select id="trend-timeframe" class="styled-select-sm" aria-label="Trends Filter">
+                      <option value="active-vs-months">Active vs. Months</option>
+                      <option value="annual-overview">Annual Overview</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="trends-main-chart" aria-label="Customer Retention and Churn Trends chart. Visualizes active users vs churned users over time." role="img"></canvas>
+                  <div class="sr-only">
+                    <table id="trends-accessible-table" summary="Customer Retention and Churn Trends Over Last 6 Months">
+                      <thead>
+                        <tr>
+                          <th scope="col">Month</th>
+                          <th scope="col">Active Users</th>
+                          <th scope="col">Churned Users</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Churn Drivers Card -->
+              <div class="content-card" id="card-drivers">
+                <div class="card-header">
+                  <h2>Top Churn Drivers (Analysis)</h2>
+                  <div class="card-controls">
+                    <select id="drivers-segment" class="styled-select-sm" aria-label="Drivers Filter">
+                      <option value="key-factors">Key Factors</option>
+                      <option value="support-tickets">Support Tickets</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="chart-container horizontal-bar-container">
+                  <canvas id="drivers-bar-chart" aria-label="Top Churn Drivers Bar Chart. Identifies key factors leading to churn." role="img"></canvas>
+                  <div class="sr-only">
+                    <table id="drivers-accessible-table" summary="Top factors contributing to customer churn">
+                      <thead>
+                        <tr>
+                          <th scope="col">Churn Factor</th>
+                          <th scope="col">Percentage Impact</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right side AI panel column -->
+            <div class="ai-panel-column">
+              <!-- AI predictions overview -->
+              <div class="content-card" id="card-ai-predictions">
+                <div class="card-header">
+                  <h2>AI-Driven Churn Risk Predictions</h2>
+                </div>
+                <div class="ai-predictions-stats">
+                  <div class="ai-high-risk-metric">
+                    <span class="ai-metric-label">High-Risk Users</span>
+                    <span class="ai-metric-number" id="high-risk-count">1,280</span>
+                  </div>
+                  <div class="ai-chart-container">
+                    <canvas id="predictions-risk-chart" aria-label="Risk category distribution chart. Showing Low, Medium, and High risk profiles." role="img"></canvas>
+                  </div>
+                </div>
+
+                <!-- Predicted Churn Risk Table -->
+                <div class="predicted-table-container">
+                  <h3>Predicted Churn Risk</h3>
+                  <div class="table-scroll-wrapper">
+                    <table class="dashboard-table" id="predictions-table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Customer Name</th>
+                          <th scope="col">Plan</th>
+                          <th scope="col">Churn Score</th>
+                          <th scope="col">Activity</th>
+                          <th scope="col" class="text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="predictions-table-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subscriber Activity Timeline -->
+              <div class="content-card" id="card-timeline">
+                <div class="card-header">
+                  <h2>Subscriber Activity Timeline</h2>
+                  <div class="card-controls">
+                    <select id="timeline-user-select" class="styled-select-sm" aria-label="Select Customer Timeline"></select>
+                  </div>
+                </div>
+                <div class="timeline-container">
+                  <div class="timeline-user-badge">
+                    <div class="user-avatar-sm" id="timeline-avatar">LO</div>
+                    <div class="user-badge-details">
+                      <span class="user-badge-name" id="timeline-user-name">Liam O'Connell</span>
+                      <span class="user-badge-plan" id="timeline-user-plan">Enterprise Plan</span>
+                    </div>
+                  </div>
+                  <ul class="timeline-list" id="timeline-list-items"></ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 2: CUSTOMERS DIRECTORY
+             ========================================== -->
+        <section id="view-customers" class="dashboard-view hidden">
+          <div class="dashboard-header-row">
+            <h1 class="page-title">Customer Directory</h1>
+          </div>
+          
+          <div class="content-card">
+            <!-- Filter Toolbar -->
+            <div class="directory-toolbar">
+              <div class="search-box">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="dir-search-input" placeholder="Search customer directory..." aria-label="Search directory">
+              </div>
+              <div class="directory-filters">
+                <div class="filter-item">
+                  <label for="dir-filter-plan">Plan:</label>
+                  <select id="dir-filter-plan" class="styled-select-sm">
+                    <option value="all">All Plans</option>
+                    <option value="enterprise">Enterprise</option>
+                    <option value="pro">Pro Plan</option>
+                    <option value="growth">Growth Plan</option>
+                  </select>
+                </div>
+                <div class="filter-item">
+                  <label for="dir-filter-risk">Risk Level:</label>
+                  <select id="dir-filter-risk" class="styled-select-sm">
+                    <option value="all">All Risks</option>
+                    <option value="high">High (&gt;75%)</option>
+                    <option value="medium">Medium (50% - 74%)</option>
+                    <option value="low">Low (&lt;50%)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Full Customers Table -->
+            <div class="table-scroll-wrapper">
+              <table class="dashboard-table directory-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Plan</th>
+                    <th scope="col">Churn Score</th>
+                    <th scope="col">Activity Level</th>
+                    <th scope="col">Last Login</th>
+                    <th scope="col" class="text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="directory-table-body">
+                  <!-- Dynamically populated from JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination bar -->
+            <div class="directory-pagination">
+              <span class="pagination-indicator" id="pagination-text">Showing 1-10 of 16 records</span>
+              <div class="pagination-buttons">
+                <button class="btn btn-secondary btn-sm" id="pagination-prev-btn" disabled>Previous</button>
+                <button class="btn btn-secondary btn-sm" id="pagination-next-btn">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 3: PREDICTIONS SIMULATOR
+             ========================================== -->
+        <section id="view-predictions" class="dashboard-view hidden">
+          <div class="dashboard-header-row">
+            <h1 class="page-title">Predictive What-If Simulation</h1>
+          </div>
+
+          <div class="analytics-layout-grid">
+            <!-- Left inputs panel -->
+            <div class="content-card">
+              <div class="card-header">
+                <h2>Simulation Parameters</h2>
+              </div>
+              <p class="text-muted" style="font-size: 0.85rem;">Adjust the service metrics below to calculate simulated churn drops based on Customer Success engagement investments.</p>
+              
+              <div class="simulator-sliders">
+                <!-- Slider 1 -->
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <label for="slider-sla">Support Response SLA Target</label>
+                    <span class="slider-value" id="val-slider-sla">24 hours</span>
+                  </div>
+                  <input type="range" id="slider-sla" min="2" max="48" value="24" step="2" class="range-input">
+                  <span class="slider-hint">Faster SLA reduces support-related drop-offs.</span>
+                </div>
+
+                <!-- Slider 2 -->
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <label for="slider-discount">Average Outreach Discount Offered</label>
+                    <span class="slider-value" id="val-slider-discount">0%</span>
+                  </div>
+                  <input type="range" id="slider-discount" min="0" max="30" value="0" step="5" class="range-input">
+                  <span class="slider-hint">Incentives boost renewal odds for price-sensitive cohorts.</span>
+                </div>
+
+                <!-- Slider 3 -->
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <label for="slider-training">Active Training Sessions Conducted</label>
+                    <span class="slider-value" id="val-slider-training">0 sessions</span>
+                  </div>
+                  <input type="range" id="slider-training" min="0" max="5" value="0" step="1" class="range-input">
+                  <span class="slider-hint">Training combats user inactivity and feature gaps.</span>
+                </div>
+              </div>
+
+              <div class="simulator-summary">
+                <div class="sim-metric">
+                  <span class="sim-label">Projected Churn Rate</span>
+                  <span class="sim-value text-success" id="sim-projected-churn">6.2%</span>
+                </div>
+                <div class="sim-metric">
+                  <span class="sim-label">Absolute Churn Drop</span>
+                  <span class="sim-value text-primary" id="sim-churn-reduction">0.0%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right graph panel -->
+            <div class="content-card">
+              <div class="card-header">
+                <h2>Projected Risk Curve (30 Days)</h2>
+              </div>
+              <div class="chart-container" style="height: 320px;">
+                <canvas id="simulation-chart" aria-label="Simulation output chart plotting standard risk vs. simulated output trajectory." role="img"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 4: COHORT SEGMENTS
+             ========================================== -->
+        <section id="view-segments" class="dashboard-view hidden">
+          <div class="dashboard-header-row">
+            <h1 class="page-title">Target Churn Segments</h1>
+          </div>
+
+          <div class="segments-grid" id="segments-grid-container">
+            <!-- Dynamically populated from JS -->
+          </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 5: REPORTS & EXPORTS
+             ========================================== -->
+        <section id="view-reports" class="dashboard-view hidden">
+          <div class="dashboard-header-row">
+            <h1 class="page-title">Executive Churn Reporting</h1>
+          </div>
+
+          <div class="content-card">
+            <div class="card-header">
+              <h2>Risk Cohort Profile Exporter</h2>
+              <button class="btn btn-primary" id="btn-export-csv">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-inline-end: 6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export Directory to CSV
+              </button>
+            </div>
+            <p class="text-muted" style="font-size: 0.85rem; margin-block-end: var(--space-md);">Click to download a client-side compiled CSV log containing churn statistics, score ratings, and key drivers for all high-risk accounts.</p>
+
+            <div class="report-overview-box">
+              <h3>Snapshot Stats</h3>
+              <div class="snapshot-grid">
+                <div class="snapshot-item">
+                  <span class="snapshot-num text-danger">3</span>
+                  <span class="snapshot-lbl">Critical Accounts (&gt;80%)</span>
+                </div>
+                <div class="snapshot-item">
+                  <span class="snapshot-num text-warning">2</span>
+                  <span class="snapshot-lbl">At Risk (50-80%)</span>
+                </div>
+                <div class="snapshot-item">
+                  <span class="snapshot-num text-success">11</span>
+                  <span class="snapshot-lbl">Stable Core (&lt;50%)</span>
+                </div>
+                <div class="snapshot-item">
+                  <span class="snapshot-num text-primary">32%</span>
+                  <span class="snapshot-lbl">Primary Churn Driver (Cost)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             VIEW 6: SETTINGS & THRESHOLDS
+             ========================================== -->
+        <section id="view-settings" class="dashboard-view hidden">
+          <div class="dashboard-header-row">
+            <h1 class="page-title">Prediction Settings</h1>
+          </div>
+
+
+
+          <div class="analytics-layout-grid">
+            <!-- Left Threshold Adjustments -->
+            <div class="content-card">
+              <div class="card-header">
+                <h2>AI Classification Boundaries</h2>
+              </div>
+              <p class="text-muted" style="font-size: 0.85rem; margin-block-end: var(--space-md);">
+                Modify the threshold boundaries that separate Low, Medium, and High churn risk states. Setting these boundaries adjusts dashboard labels in real-time.
+              </p>
+
+              <div class="simulator-sliders">
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <label for="settings-threshold-high">High Risk Threshold (minimum score)</label>
+                    <span class="slider-value" id="val-settings-threshold-high">75%</span>
+                  </div>
+                  <input type="range" id="settings-threshold-high" min="60" max="95" value="75" step="5" class="range-input">
+                  <span class="slider-hint">Customers scoring above this limit trigger critical notifications.</span>
+                </div>
+
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <label for="settings-threshold-med">Medium Risk Threshold (minimum score)</label>
+                    <span class="slider-value" id="val-settings-threshold-med">50%</span>
+                  </div>
+                  <input type="range" id="settings-threshold-med" min="30" max="59" value="50" step="5" class="range-input">
+                  <span class="slider-hint">Defines the boundary between stable accounts and warning-tier accounts.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Automation Configuration -->
+            <div class="content-card">
+              <div class="card-header">
+                <h2>Mitigation Triggers</h2>
+              </div>
+              <p class="text-muted" style="font-size: 0.85rem; margin-block-end: var(--space-md);">
+                Configure webhooks and notifications that dispatch alerts when a customer enters the High-Risk category.
+              </p>
+
+              <div class="toggle-list">
+                <div class="toggle-row">
+                  <div class="toggle-label">
+                    <h4>Automated Outreach Draft</h4>
+                    <p>Generate draft email templates for account managers when scores hit high risk.</p>
+                  </div>
+                  <label class="switch" aria-label="Auto draft toggle">
+                    <input type="checkbox" id="settings-auto-email" checked>
+                    <span class="slider-toggle"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-label">
+                    <h4>Slack Alert Dispatch</h4>
+                    <p>Post customer warnings automatically into the #customer-success channel.</p>
+                  </div>
+                  <label class="switch" aria-label="Slack alerts toggle">
+                    <input type="checkbox" id="settings-slack-alert">
+                    <span class="slider-toggle"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-row">
+                  <div class="toggle-label">
+                    <h4>Integrations Healthcheck</h4>
+                    <p>Trigger automatic backend webhook healthcheck checks if API volume drops 20%.</p>
+                  </div>
+                  <label class="switch" aria-label="Health check toggle">
+                    <input type="checkbox" id="settings-webhook-trigger" checked>
+                    <span class="slider-toggle"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       GOOGLE CLIENT ACCOUNTS CHOOSER MODAL
+       ========================================== -->
+  <dialog id="google-chooser-dialog" class="popover-reveal" aria-labelledby="google-chooser-title">
+    <div class="google-chooser-header">
+      <svg viewBox="0 0 24 24" width="24" height="24" class="google-g-logo" aria-hidden="true">
+        <path fill="#ea4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.47 14.99 1 12 1 7.35 1 3.37 3.65 1.44 7.5l3.82 2.96C6.18 7.37 8.87 5.04 12 5.04z"/>
+        <path fill="#4285f4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.4 3.58l3.73 2.89c2.18-2 3.7-5.02 3.7-8.62z"/>
+        <path fill="#fbbc05" d="M5.26 14.54c-.24-.72-.38-1.5-.38-2.3s.14-1.58.38-2.3L1.44 6.98C.52 8.84 0 10.91 0 13s.52 4.16 1.44 6.02l3.82-2.48z"/>
+        <path fill="#34a853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.73-2.89c-1.1.74-2.52 1.18-4.23 1.18-3.13 0-5.82-2.33-6.74-5.42L1.44 15.4C3.37 19.25 7.35 23 12 23z"/>
+      </svg>
+      <h2 id="google-chooser-title">Choose an account</h2>
+      <p>to continue to <strong>Predicta Analytics</strong></p>
+    </div>
+    <div class="google-chooser-content">
+      <!-- Chooser Accounts list -->
+      <ul class="google-accounts-list" id="google-accounts-list">
+        <li class="google-account-row" data-account-name="Sarah Jenkins" data-account-email="sarah.jenkins@gmail.com" data-account-avatar="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" data-account-role="Customer Success Director">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Sarah J." class="google-avatar-img">
+          <div class="google-account-info">
+            <span class="google-acc-name">Sarah Jenkins</span>
+            <span class="google-acc-email">sarah.jenkins@gmail.com</span>
+          </div>
+        </li>
+        <li class="google-account-row" data-account-name="Alex Chen" data-account-email="alex.chen@gmail.com" data-account-avatar="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" data-account-role="CS Analytics Lead">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Alex Chen" class="google-avatar-img">
+          <div class="google-account-info">
+            <span class="google-acc-name">Alex Chen</span>
+            <span class="google-acc-email">alex.chen@gmail.com</span>
+          </div>
+        </li>
+        <li class="google-account-row" id="google-acc-custom-trigger">
+          <div class="google-avatar-placeholder" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+          </div>
+          <div class="google-account-info">
+            <span class="google-acc-name">Use another account</span>
+            <span class="google-acc-email">Sign up with a new Google profile</span>
+          </div>
+        </li>
+      </ul>
+      
+      <!-- Custom User Signup Form -->
+      <div id="google-signup-subform" class="google-signup-subform hidden">
+        <form id="google-custom-signup-form">
+          <div class="form-group">
+            <label for="google-signup-name">Full Name</label>
+            <input type="text" id="google-signup-name" required placeholder="e.g. Liam O'Connell">
+          </div>
+          <div class="form-group">
+            <label for="google-signup-email">Google Email</label>
+            <input type="email" id="google-signup-email" required placeholder="e.g. liam.o@gmail.com">
+          </div>
+
+          <div class="dialog-actions" style="margin-top: 10px;">
+            <button type="button" class="btn btn-secondary btn-sm" id="google-signup-back">Back</button>
+            <button type="submit" class="btn btn-primary btn-sm">Create & Login</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="google-chooser-footer">
+        <p>To continue, Google will share your name, email address, language preference, and profile picture with Predicta. Before using this app, you can review Predicta's privacy policy and terms of service.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Interactive Popover dialog for client engagement -->
+  <dialog id="engage-dialog" class="popover-reveal" aria-labelledby="engage-dialog-title">
+    <div class="dialog-header">
+      <h2 id="engage-dialog-title">Initiate Customer Outreach</h2>
+      <button class="dialog-close-btn" aria-label="Close modal" id="close-engage-dialog">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="dialog-content">
+      <div class="dialog-customer-summary">
+        <div class="customer-avatar-large" id="dialog-cust-avatar">AB</div>
+        <div class="customer-metadata">
+          <h3 id="dialog-cust-name">Alice Brown</h3>
+          <span class="badge-pill bg-danger-light text-danger" id="dialog-cust-score">Score: 88%</span>
+          <span class="text-muted" id="dialog-cust-plan">Enterprise Plan &bull; Last Active: 2h ago</span>
+        </div>
+      </div>
+
+      <div class="dialog-recommendation-panel">
+        <h4>AI Churn Driver Risk: <span id="dialog-driver-tag" class="text-danger">Pricing Sensitivity</span></h4>
+        <p id="dialog-driver-desc">Customer has visited the billing page twice in the last 48 hours and checked competitor features. Risk of pricing mismatch is high.</p>
+      </div>
+
+      <form id="engage-outreach-form" method="dialog">
+        <div class="form-group">
+          <label for="outreach-channel">Outreach Channel</label>
+          <select id="outreach-channel" required>
+            <option value="email">Direct Account Manager Email</option>
+            <option value="call">Schedule Escalation Call</option>
+            <option value="in-app">Targeted In-App Incentive</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="outreach-incentive">Proposed Retention Incentive</label>
+          <select id="outreach-incentive">
+            <option value="discount">15% Annual Contract Discount</option>
+            <option value="training">Free Executive Coaching / Training Session</option>
+            <option value="add-on">Complimentary Feature Add-on (3 Months)</option>
+            <option value="none">No incentive (Basic Outreach)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="outreach-notes">Action Items / Conversation Notes</label>
+          <textarea id="outreach-notes" rows="3" placeholder="Draft email outline or specify key topics for the call..."></textarea>
+        </div>
+
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-secondary" id="cancel-engage-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="confirm-engage-btn">Log & Send Outreach</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Bootstrapping scripts -->
+</body>
+</html>
