@@ -56,56 +56,6 @@ Predicta/
 
 ---
 
-## ⚙️ Installation
-
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/Lavanya-code-byte/Predicta.git
-
-cd Predicta
-```
-
----
-
-### 2. Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-### 3. Run Development Server
-
-```bash
-npm run dev
-```
-
-Application runs on:
-
-```text
-http://localhost:5173
-```
-
----
-
-### 4. Build for Production
-
-```bash
-npm run build
-```
-
----
-
-### 5. Preview Production Build
-
-```bash
-npm run preview
-```
-
----
-
 ## 📊 Dashboard Overview
 
 * Customer Retention Rate
